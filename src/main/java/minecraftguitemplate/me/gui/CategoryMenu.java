@@ -1,7 +1,7 @@
 package minecraftguitemplate.me.gui;
 
 import minecraftguitemplate.me.systems.Categories;
-import minecraftguitemplate.me.systems.impl.Module;
+import minecraftguitemplate.me.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,16 +23,16 @@ public class CategoryMenu {
         Mask itemSlots = BinaryMask.builder(pageTemplate.getDimensions())
                 .pattern("111111111").build();
 
-        int length = (int) Math.ceil(Categories.values().length / 9);
+        int length = (int) Math.ceil(Categories.values().length / 8);
 
         ItemStack[] itemStacks = new ItemStack[length * 9];
         Arrays.fill(itemStacks, new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         category = PaginatedMenuBuilder.builder(pageTemplate)
                 .slots(itemSlots)
-                .nextButton(new ItemStack(Material.ARROW))
+                .nextButton(ItemUtils.getNamedItem(Material.ARROW, "Next page"))
                 .nextButtonEmpty(new ItemStack(Material.RED_STAINED_GLASS_PANE)) // Icon when no next page available
                 .nextButtonSlot(53)
-                .previousButton(new ItemStack(Material.ARROW))
+                .previousButton(ItemUtils.getNamedItem(Material.ARROW, "Previous page"))
                 .previousButtonEmpty(new ItemStack(Material.RED_STAINED_GLASS_PANE)) // Icon when no previous page available
                 .previousButtonSlot(45)
                 .addItems(Arrays.asList(itemStacks))
@@ -71,10 +71,7 @@ public class CategoryMenu {
             try {
                 for (int j = 0; j < categoryList.length; j++) {
                     Categories value = values[i * categoryList.length + j];
-                    ItemStack itemStack = new ItemStack(value.getIcon(), 1);
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.setDisplayName(value.getName());
-                    itemStack.setItemMeta(itemMeta);
+                    ItemStack itemStack = ItemUtils.getNamedItem(value.getIcon(), value.getName());
                     Slot slot = slots.getSlot(categoryList[j]);
                     slot.setItem(itemStack);
                     slot.setClickHandler(((player, clickInformation) -> {
@@ -83,7 +80,12 @@ public class CategoryMenu {
                 }
             } catch (IndexOutOfBoundsException ignored) {}
 
-
+            ItemStack itemStack = ItemUtils.getNamedItem(Material.ARROW, "Go back");
+            Slot slot = slots.getSlot(0);
+            slot.setItem(itemStack);
+            slot.setClickHandler(((player, clickInformation) -> {
+                MainMenu.display(player);
+            }));
         }
     }
     public static void display(Player player) {

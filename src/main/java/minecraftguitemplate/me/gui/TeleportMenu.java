@@ -1,9 +1,10 @@
 package minecraftguitemplate.me.gui;
 
-import minecraftguitemplate.me.systems.Categories;
 import minecraftguitemplate.me.systems.impl.Module;
-import minecraftguitemplate.me.systems.impl.ModuleManager;
 import minecraftguitemplate.me.utils.ItemUtils;
+import minecraftguitemplate.me.utils.PlayerUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -16,20 +17,14 @@ import org.ipvp.canvas.paginate.PaginatedMenuBuilder;
 import org.ipvp.canvas.slot.Slot;
 import org.ipvp.canvas.type.ChestMenu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class ModuleMenu {
-    public static void display(Player p, Categories category) {
-        List<Module> target = new ArrayList<>();
-        for (Module module : ModuleManager.getModuleList()) {
-            if (module.getCategory() == category)
-                target.add(module);
-        }
+public class TeleportMenu {
+    public static void display(Player p) {
+        List<Player> target = PlayerUtils.getAllPlayer();
+        target.remove(p);
 
-        Menu.Builder<ChestMenu.Builder> pageTemplate = ChestMenu.builder(6).title("Module").redraw(true);
+        Menu.Builder<ChestMenu.Builder> pageTemplate = ChestMenu.builder(6).title("Teleport").redraw(true);
         Mask itemSlots = BinaryMask.builder(pageTemplate.getDimensions())
                 .pattern("111111111").build();
 
@@ -75,41 +70,56 @@ public class ModuleMenu {
                 slots.getSlot(j).setItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
             }
 
-            if (!target.isEmpty()) {
-                try {
-                    for (int j = 10; j < 34; j++) {
-                        Module value = target.get(i * 24 + (j - 10));
-                        Slot slot = slots.getSlot(j);
-                        slot.setClickHandler(((player, clickInformation) -> {
-                            if (clickInformation.getClickType() == ClickType.RIGHT) {
-                                if (!value.getConfigList().isEmpty()) {
-                                    ConfigMenu.display(player, value);
-                                }
-                            } else {
-                                value.setEnabled(!value.isEnabled());
-                                slots.update();
-                            }
-                        }));
-                        slot.setItemTemplate(val -> ItemUtils.getNamedItem(value.isEnabled() ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE,
-                                value.getName(), "Right click to configure"));
-
-                        slots.update();
-                    }
-                } catch (IndexOutOfBoundsException ignored) {
-                }
-            } else {
+            try {
                 for (int j = 10; j < 34; j++) {
-                    ItemStack itemStack = ItemUtils.getNamedItem(Material.GRASS, "No modules found.");
-                    slots.getSlot(j).setItem(itemStack);
+                    Slot slot = slots.getSlot(j);
+                    Player player1 = target.get(i * 24 + (j - 10));
+                    slot.setItem(ItemUtils.getPlayerHead(player1));
+                    slot.setClickHandler(((player, clickInformation) -> {
+                        SubTeleportMenu.display(player, player1);
+                    }));
                 }
+            } catch (IndexOutOfBoundsException ignored) {
             }
 
             ItemStack itemStack = ItemUtils.getNamedItem(Material.ARROW, "Go back");
             Slot slot = slots.getSlot(0);
             slot.setItem(itemStack);
-            slot.setClickHandler(((player, clickInformation) -> {
-                MainMenu.display(player);
-            }));
+            slot.setClickHandler(((player, clickInformation) -> MainMenu.display(p)));
+
+            slots.getSlot(3).setItem(ItemUtils.getNamedItem(Material.GLISTERING_MELON_SLICE, "全員サバイバル", "シフトしながらクリックで自分含め全員サバイバル"));
+            slots.getSlot(3).setClickHandler((player, clickInformation) -> {
+                List<Player> allPlayer = PlayerUtils.getAllPlayer();
+                if (clickInformation.getClickType() != ClickType.SHIFT_LEFT) {
+                    allPlayer.remove(player);
+                }
+                allPlayer.forEach(player1 -> {
+                    player1.setGameMode(GameMode.SURVIVAL);
+                });
+            });
+            slots.getSlot(4).setItem(ItemUtils.getNamedItem(Material.ENDER_EYE, "全員自分にtp"));
+            slots.getSlot(4).setClickHandler((player, clickInformation) -> {
+                List<Player> allPlayer = PlayerUtils.getAllPlayer();
+                allPlayer.forEach(player1 -> {
+                    player1.teleport(player);
+                });
+            });
+            slots.getSlot(5).setItem(ItemUtils.getNamedItem(Material.POTION, "全員スペクテイター", "シフトしながらクリックで自分含め全員サバイバル"));
+            slots.getSlot(5).setClickHandler((player, clickInformation) -> {
+                List<Player> allPlayer = PlayerUtils.getAllPlayer();
+                if (clickInformation.getClickType() != ClickType.SHIFT_LEFT) {
+                    allPlayer.remove(player);
+                }
+                allPlayer.forEach(player1 -> {
+                    player1.setGameMode(GameMode.SPECTATOR);
+                });
+            });
+
+            slots.getSlot(8).setItem(ItemUtils.getNamedItem(Material.EMERALD_BLOCK, "Refresh"));
+            slots.getSlot(8).setClickHandler((player, clickInformation) -> {
+                clickInformation.getClickedMenu().close();
+                display(player);
+            });
         }
 
         module.get(0).open(p);

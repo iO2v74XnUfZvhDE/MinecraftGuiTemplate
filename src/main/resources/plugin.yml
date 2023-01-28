@@ -3,5 +3,8 @@ version: '${project.version}'
 main: minecraftguitemplate.me.GuiTemplate
 api-version: 1.19
 commands:
-  showgui:
+  mainmenu:
     description: Show guitemplate's gui
+  tpmenu:
+    alias: [tpm]
+    description: Simple tpmenu

@@ -3,6 +3,7 @@ package minecraftguitemplate.me.gui;
 import minecraftguitemplate.me.config.values.Value;
 import minecraftguitemplate.me.systems.impl.Module;
 import minecraftguitemplate.me.utils.ChatUtils;
+import minecraftguitemplate.me.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -32,10 +33,10 @@ public class ConfigMenu {
         Arrays.fill(itemStacks, new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         List<Menu> configmenu = PaginatedMenuBuilder.builder(pageTemplate)
                 .slots(itemSlots)
-                .nextButton(new ItemStack(Material.ARROW))
+                .nextButton(ItemUtils.getNamedItem(Material.ARROW, "Next page"))
                 .nextButtonEmpty(new ItemStack(Material.RED_STAINED_GLASS_PANE)) // Icon when no next page available
                 .nextButtonSlot(53)
-                .previousButton(new ItemStack(Material.ARROW))
+                .previousButton(ItemUtils.getNamedItem(Material.ARROW, "Previous page"))
                 .previousButtonEmpty(new ItemStack(Material.RED_STAINED_GLASS_PANE)) // Icon when no previous page available
                 .previousButtonSlot(45)
                 .addItems(Arrays.asList(itemStacks))
@@ -150,11 +151,7 @@ public class ConfigMenu {
                             material = bool ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
                         }
 
-                        ItemStack itemStack = new ItemStack(material, 1);
-                        ItemMeta itemMeta = itemStack.getItemMeta();
-                        itemMeta.setDisplayName(value.getName());
-                        itemMeta.setLore(Collections.singletonList(obj.toString()));
-                        itemStack.setItemMeta(itemMeta);
+                        ItemStack itemStack = ItemUtils.getNamedItem(material, value.getName(), obj.toString());
                         return itemStack;
                     });
 
@@ -163,14 +160,11 @@ public class ConfigMenu {
             } catch (IndexOutOfBoundsException ignored) {
             }
 
-            ItemStack itemStack = new ItemStack(Material.ARROW, 1);
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName("Go back");
-            itemStack.setItemMeta(itemMeta);
+            ItemStack itemStack = ItemUtils.getNamedItem(Material.ARROW, "Go back");
             Slot slot = slots.getSlot(0);
             slot.setItem(itemStack);
             slot.setClickHandler(((player, clickInformation) -> {
-                ModuleMenu.display(p, m.getCategory());
+                MainMenu.display(player);
             }));
         }
 
