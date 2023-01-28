@@ -7,7 +7,7 @@ import minecraftguitemplate.me.systems.impl.ModuleManager;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigManager {
-    public static void saveConfig() {
+    public static void loadConfig() {
         FileConfiguration config = GuiTemplate.getInstance().getConfig();
         for (Module module : ModuleManager.getModuleList()) {
             for (Value<?> value : module.getConfigList()) {
@@ -40,6 +40,24 @@ public class ConfigManager {
                     } else {
                         config.set(path, bool);
                     }
+                }
+            }
+        }
+    }
+
+    public static void saveConfig() {
+        FileConfiguration config = GuiTemplate.getInstance().getConfig();
+        for (Module module : ModuleManager.getModuleList()) {
+            for (Value<?> value : module.getConfigList()) {
+                String path = "state." + module.getName() + "." + value.getName();
+                if (value.get() instanceof String string) {
+                    config.set(path, string);
+                } else if (value.get() instanceof Integer integer) {
+                    config.set(path, integer);
+                } else if (value.get() instanceof Double floatDecimal) {
+                    config.set(path, floatDecimal);
+                } else if (value.get() instanceof Boolean bool) {
+                    config.set(path, bool);
                 }
             }
         }

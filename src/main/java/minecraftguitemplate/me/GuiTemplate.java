@@ -2,7 +2,7 @@ package minecraftguitemplate.me;
 
 import minecraftguitemplate.me.config.ConfigManager;
 import minecraftguitemplate.me.gui.CategoryMenu;
-import minecraftguitemplate.me.systems.Categories;
+import minecraftguitemplate.me.listener.ChatListener;
 import minecraftguitemplate.me.systems.impl.ModuleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -27,14 +27,16 @@ public final class GuiTemplate extends JavaPlugin {
 
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new MenuFunctionListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         ModuleManager.startup(); // Plz call this startup before Config-manager startup call
-        ConfigManager.saveConfig(); // Init
+        ConfigManager.loadConfig(); // Init
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         getLogger().info("Confirmed :)");
+        ConfigManager.saveConfig();
         saveConfig();
     }
 

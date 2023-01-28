@@ -32,7 +32,7 @@ public class ModuleMenu {
         Mask itemSlots = BinaryMask.builder(pageTemplate.getDimensions())
                 .pattern("111111111").build();
 
-        int length = (int) Math.ceil(target.size() / 9);
+        int length = (int) Math.ceil(target.size() / 24);
 
         ItemStack[] itemStacks = new ItemStack[length * 9];
         Arrays.fill(itemStacks, new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
@@ -81,7 +81,9 @@ public class ModuleMenu {
                         Slot slot = slots.getSlot(j);
                         slot.setClickHandler(((player, clickInformation) -> {
                             if (clickInformation.getClickType() == ClickType.RIGHT) {
-                                // TODO: Edit module config
+                                if (!value.getConfigList().isEmpty()) {
+                                    ConfigMenu.display(player, value);
+                                }
                             } else {
                                 value.setEnabled(!value.isEnabled());
                                 slots.update();
