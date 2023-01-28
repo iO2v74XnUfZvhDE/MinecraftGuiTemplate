@@ -33,6 +33,13 @@ public class ConfigManager {
                     } else {
                         config.set(path, floatDecimal);
                     }
+                } else if (value.get() instanceof Boolean bool) {
+                    Value<Boolean> val = (Value<Boolean>) value;
+                    if (config.contains(path)) {
+                        val.set(config.getBoolean(path));
+                    } else {
+                        config.set(path, bool);
+                    }
                 }
             }
         }

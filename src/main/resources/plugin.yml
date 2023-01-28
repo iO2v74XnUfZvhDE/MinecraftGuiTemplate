@@ -2,3 +2,6 @@ name: MinecraftGuiTemplate
 version: '${project.version}'
 main: minecraftguitemplate.me.GuiTemplate
 api-version: 1.19
+commands:
+  showgui:
+    description: Show guitemplate's gui
