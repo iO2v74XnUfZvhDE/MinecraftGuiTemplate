@@ -11,7 +11,7 @@ import org.ipvp.canvas.type.ChestMenu;
 
 import java.util.Date;
 
-public class SubTeleportMenu {
+public class SubPlayerMenu {
     public static void display(Player p, Player target) {
         ChestMenu page = ChestMenu.builder(3)
                 .title(target.getName())
@@ -42,7 +42,7 @@ public class SubTeleportMenu {
             target.kickPlayer("You have been banned by " + player.getName());
             page.close();
         });
-        
+
 
         page.open(p);
     }

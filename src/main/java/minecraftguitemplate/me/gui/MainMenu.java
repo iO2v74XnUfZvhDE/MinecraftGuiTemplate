@@ -22,14 +22,14 @@ public class MainMenu {
         Slot slot10= page.getSlot(10);
         slot10.setItem(ItemUtils.getNamedItem(Material.DEBUG_STICK, "Utility", "便利な機能を提供する様々な機能があります。"));
         Slot slot12 = page.getSlot(12);
-        slot12.setItem(ItemUtils.getNamedItem(Material.ENDER_PEARL, "TP MENU",
-                "TPするためのメニュー", "/tpmenuコマンドでも使用できます。", "/tpmenu <player>によってそのプレイヤーの個別メニューを開くことが可能です。"));
+        slot12.setItem(ItemUtils.getNamedItem(Material.ENDER_PEARL, "PLAYER MENU",
+                "Playerをいじれるメニュー", "/pmコマンドでも使用できます。", "/pm <player>によってそのプレイヤーの個別メニューを開くことが可能です。"));
 
         slot10.setClickHandler(((player, clickInformation) -> {
             CategoryMenu.display(player);
         }));
         slot12.setClickHandler((player, clickInformation) -> {
-            TeleportMenu.display(player);
+            PlayerMenu.display(player);
         });
 
         page.open(p);

@@ -2,10 +2,9 @@ package minecraftguitemplate.me;
 
 import minecraftguitemplate.me.config.ConfigManager;
 import minecraftguitemplate.me.events.listener.ListenerManager;
-import minecraftguitemplate.me.gui.CategoryMenu;
 import minecraftguitemplate.me.gui.MainMenu;
-import minecraftguitemplate.me.gui.SubTeleportMenu;
-import minecraftguitemplate.me.gui.TeleportMenu;
+import minecraftguitemplate.me.gui.SubPlayerMenu;
+import minecraftguitemplate.me.gui.PlayerMenu;
 import minecraftguitemplate.me.systems.impl.ModuleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -54,7 +53,7 @@ public final class GuiTemplate extends JavaPlugin {
                 return true;
             }
             sender.sendMessage("Sorry, You must be a player to use this command.");
-        } else if (command.getName().equalsIgnoreCase("tpmenu")) {
+        } else if (command.getName().equalsIgnoreCase("playermenu")) {
             if (getConfig().getBoolean("requireop") && !sender.isOp()) {
                 sender.sendMessage("You didnt have op");
                 return false;
@@ -62,9 +61,9 @@ public final class GuiTemplate extends JavaPlugin {
 
             if (sender instanceof Player p) {
                 if (args.length == 0)
-                    TeleportMenu.display(p);
+                    PlayerMenu.display(p);
                 else
-                    SubTeleportMenu.display(p, Bukkit.getPlayer(args[0]));
+                    SubPlayerMenu.display(p, Bukkit.getPlayer(args[0]));
                 return true;
             }
             sender.sendMessage("Sorry, You must be a player to use this command.");

@@ -1,15 +1,12 @@
 package minecraftguitemplate.me.gui;
 
-import minecraftguitemplate.me.systems.impl.Module;
 import minecraftguitemplate.me.utils.ItemUtils;
 import minecraftguitemplate.me.utils.PlayerUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.ipvp.canvas.Menu;
 import org.ipvp.canvas.mask.BinaryMask;
 import org.ipvp.canvas.mask.Mask;
@@ -19,12 +16,12 @@ import org.ipvp.canvas.type.ChestMenu;
 
 import java.util.*;
 
-public class TeleportMenu {
+public class PlayerMenu {
     public static void display(Player p) {
         List<Player> target = PlayerUtils.getAllPlayer();
         target.remove(p);
 
-        Menu.Builder<ChestMenu.Builder> pageTemplate = ChestMenu.builder(6).title("Teleport").redraw(true);
+        Menu.Builder<ChestMenu.Builder> pageTemplate = ChestMenu.builder(6).title("Player").redraw(true);
         Mask itemSlots = BinaryMask.builder(pageTemplate.getDimensions())
                 .pattern("111111111").build();
 
@@ -76,7 +73,7 @@ public class TeleportMenu {
                     Player player1 = target.get(i * 24 + (j - 10));
                     slot.setItem(ItemUtils.getPlayerHead(player1));
                     slot.setClickHandler(((player, clickInformation) -> {
-                        SubTeleportMenu.display(player, player1);
+                        SubPlayerMenu.display(player, player1);
                     }));
                 }
             } catch (IndexOutOfBoundsException ignored) {
