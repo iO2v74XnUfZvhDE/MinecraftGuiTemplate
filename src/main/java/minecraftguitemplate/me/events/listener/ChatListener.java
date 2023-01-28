@@ -1,4 +1,4 @@
-package minecraftguitemplate.me.listener;
+package minecraftguitemplate.me.events.listener;
 
 import minecraftguitemplate.me.utils.ChatUtils;
 import org.bukkit.event.EventHandler;

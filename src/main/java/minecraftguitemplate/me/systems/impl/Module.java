@@ -1,12 +1,16 @@
 package minecraftguitemplate.me.systems.impl;
 
+import minecraftguitemplate.me.GuiTemplate;
 import minecraftguitemplate.me.config.values.Value;
+import minecraftguitemplate.me.events.event.player.PlayerDeathEvent;
 import minecraftguitemplate.me.systems.Categories;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class Module {
+abstract public class Module implements Listener {
     private final String name;
     private final Categories category;
     public Module(String name, Categories category, boolean defaultEnabled) {
@@ -41,5 +45,9 @@ abstract public class Module {
 
     public List<Value<?>> getConfigList() {
         return configList;
+    }
+
+    public void onDeath(PlayerDeathEvent event) {
+
     }
 }

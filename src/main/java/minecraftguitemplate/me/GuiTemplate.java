@@ -1,15 +1,13 @@
 package minecraftguitemplate.me;
 
 import minecraftguitemplate.me.config.ConfigManager;
+import minecraftguitemplate.me.events.listener.ListenerManager;
 import minecraftguitemplate.me.gui.CategoryMenu;
-import minecraftguitemplate.me.listener.ChatListener;
 import minecraftguitemplate.me.systems.impl.ModuleManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ipvp.canvas.MenuFunctionListener;
 import org.jetbrains.annotations.NotNull;
 
 public final class GuiTemplate extends JavaPlugin {
@@ -26,10 +24,9 @@ public final class GuiTemplate extends JavaPlugin {
         getLogger().info("By @iO2v74XnUfZvhDE");
 
         saveDefaultConfig();
-        Bukkit.getPluginManager().registerEvents(new MenuFunctionListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         ModuleManager.startup(); // Plz call this startup before Config-manager startup call
         ConfigManager.loadConfig(); // Init
+        ListenerManager.startup();
     }
 
     @Override

@@ -42,6 +42,9 @@ public class ConfigManager {
                     }
                 }
             }
+
+            String path = "state." + module.getName();
+            module.setEnabled(config.getBoolean(path, false));
         }
     }
 
@@ -60,6 +63,9 @@ public class ConfigManager {
                     config.set(path, bool);
                 }
             }
+
+            String path = "state." + module.getName() + ".enable";
+            config.set(path, module.isEnabled());
         }
     }
 }
